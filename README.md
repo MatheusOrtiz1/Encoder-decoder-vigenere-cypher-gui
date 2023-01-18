@@ -1,1 +1,1 @@
-# encoder-decoder-vigenere-cypher-gui
+# Encoder-decoder-vigenere-cypher-gui
