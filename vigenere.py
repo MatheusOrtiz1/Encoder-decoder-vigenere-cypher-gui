@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 
-sg.theme('DarkAmber')   # Adiciona um toque de corr
+sg.theme('DarkAmber')   # Tema
 # Todos os elementos dentro da janela.
 layout = [  [sg.Text('Texto a ser cifrado'), sg.InputText(key='texto_entrada')],
             [sg.Text('Chave'), sg.InputText(key='chave_entrada')],
