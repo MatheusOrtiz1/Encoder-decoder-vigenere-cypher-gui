@@ -1,6 +1,8 @@
 import PySimpleGUI as sg
 
-sg.theme('DarkAmber')   # Definindo tema
+
+
+sg.theme('DarkGrey10')   # Definindo tema
 # Todos os elementos dentro da janela.
 layout = [  [sg.Text('Texto a ser cifrado'), sg.InputText(key='texto_entrada')],
             [sg.Text('Chave'), sg.InputText(key='chave_entrada')],
