@@ -9,7 +9,7 @@ layout = [  [sg.Text('Texto a ser cifrado'), sg.InputText(key='texto_entrada')],
             [sg.Button('Cifrar'), sg.Button('Decifrar')],
             [sg.Text('Texto cifrado/decifrado'), sg.Output(size=(40, 5), key='texto_saida')]]
 
-# Cria a janela
+# Janela
 window = sg.Window('Cifra de Vigenere', layout)
 
 # Loop de eventos para processar "eventos" e obter os "valores" das entradas
