@@ -1,123 +1,97 @@
-from tkinter import *
+import PySimpleGUI as sg
 
-# janela principal
-janela = Tk()
-janela.title("Cifra de Vigenere")
-janela.geometry("400x400+200+200")
+sg.theme('DarkAmber')   # Adiciona um toque de cor
+# Todos os elementos dentro da janela.
+layout = [  [sg.Text('Texto a ser cifrado'), sg.InputText(key='texto_entrada')],
+            [sg.Text('Chave'), sg.InputText(key='chave_entrada')],
+            [sg.Button('Cifrar'), sg.Button('Decifrar')],
+            [sg.Text('Texto cifrado/decifrado'), sg.Output(size=(40, 5), key='texto_saida')]]
 
-# FUNCOES
+# Cria a janela
+window = sg.Window('Cifra de Vigenere', layout)
 
-# cifrar texto
-def cifrar():
-    # pegando o texto a ser encifrado
-    palavra_pura = texto_entrada.get()
+# Loop de eventos para processar "eventos" e obter os "valores" das entradas
+while True:
+    event, values = window.read()
+    if event == sg.WIN_CLOSED: # Se o usuário fechar a janela ou clicar em cancelar
+        break
+    if event == 'Cifrar':
+        # pegando o texto a ser encifrado
+        palavra_pura = values['texto_entrada']
 
-    # pegando chave a ser utilizada no ciframento
-    chave = chave_entrada.get()
+        # pegando chave a ser utilizada no ciframento
+        chave = values['chave_entrada']
 
-    # variaveis de controle
-    nova_palavra = ""
-    i = 0
+        # variaveis de controle
+        nova_palavra = ""
+        i = 0
 
-    # laco de repeticao para modificar a palavra
-    for letra in palavra_pura:
-        # verificando se e letra
-        if letra.isalpha():
-            valor = ord(letra)
-            # verificando se e letra maiuscula
-            if letra.isupper():
-                # adicionando valor da chave da letra
-                valor += ord(chave[i % len(chave)].upper()) - 65
-                # cobrindo o caso do valor passar de 'Z'
-                if valor > ord("Z"):
-                    valor -= 26
-            # verificando se e letra minuscula
+        # laco de repeticao para modificar a palavra
+        for letra in palavra_pura:
+            # verificando se e letra
+            if letra.isalpha():
+                valor = ord(letra)
+                # verificando se e letra maiuscula
+                if letra.isupper():
+                    # adicionando valor da chave da letra
+                    valor += ord(chave[i % len(chave)].upper()) - 65
+                    # cobrindo o caso do valor passar de 'Z'
+                    if valor > ord("Z"):
+                        valor -= 26
+                # verificando se e letra minuscula
+                else:
+                    # adicionando valor da chave da letra
+                    valor += ord(chave[i % len(chave)].lower()) - 97
+                    # cobrindo o caso do valor passar de 'z'
+                    if valor > ord("z"):
+                        valor -= 26
+                i += 1
+                nova_palavra += chr(valor)
             else:
-                # adicionando valor da chave da letra
-                valor += ord(chave[i % len(chave)].lower()) - 97
-                # cobrindo o caso do valor passar de 'z'
-                if valor > ord("z"):
-                    valor -= 26
-            i += 1
-            nova_palavra += chr(valor)
-        else:
-            nova_palavra += letra
-    # pegando a palavra cifrada e mostrando na area correspondente
-    texto_saida.delete("1.0", END)
-    texto_saida.insert(INSERT, nova_palavra)
+                nova_palavra += letra
 
-# decifrar texto
-def decifrar():
-    # pegando o texto a ser decifrado
-    palavra_cifrada = texto_entrada.get()
+        # pegando a palavra cifrada e mostrando na area correspondente
+        window['texto_saida'].update(nova_palavra)
 
-    # pegando chave usada no ciframento
-    chave = chave_entrada.get()
+    elif event == 'Decifrar':
+        # pegando o texto a ser decifrado
+        palavra_cifrada = values['texto_entrada']
 
-    # variaveis de controle
-    nova_palavra = ""
-    i = 0
+        # pegando chave usada no ciframento
+        chave = values['chave_entrada']
 
-    # laco de repeticao para modificar a palavra
-    for letra in palavra_cifrada:
-        # verificando se e letra
-        if letra.isalpha():
-            valor = ord(letra)
-            # verificando se e letra maiuscula
-            if letra.isupper():
-                # subtraindo valor da chave da letra
-                valor -= ord(chave[i % len(chave)].upper()) - 65
-                # cobrindo o caso do valor passar de 'A'
-                if valor < ord("A"):
-                    valor += 26
-            # verificando se e letra minuscula
+        # variaveis de controle
+        nova_palavra = ""
+        i = 0
+
+        # laco de repeticao para modificar a palavra
+        for letra in palavra_cifrada:
+            # verificando se e letra
+            if letra.isalpha():
+                valor = ord(letra)
+                # verificando se e letra maiuscula
+
+                if letra.isupper():
+                    # subtraindo valor da chave da letra
+                    valor -= ord(chave[i % len(chave)].upper()) - 65
+
+                    if valor < ord("A"):
+                        valor += 26
+
+                else:
+                    # subtraindo valor da chave da letra
+                    valor -= ord(chave[i % len(chave)].lower()) - 97
+
+                    if valor < ord("a"):
+                        valor += 26
+
+                i += 1
+
+                nova_palavra += chr(valor)
+
             else:
-                # subtraindo valor da chave da letra
-                valor -= ord(chave[i % len(chave)].lower()) - 97
-                # cobrindo o caso do valor passar de 'a'
-                if valor < ord("a"):
-                    valor += 26
-            i += 1
-            nova_palavra += chr(valor)
-        else:
-            nova_palavra += letra
-    # pegando a palavra decifrada e mostrando na area correspondente
-    texto_saida.delete("1.0", END)
-    texto_saida.insert(INSERT, nova_palavra)
+                nova_palavra += letra
 
-# WIDGETS
+        window['texto_saida'].update(nova_palavra)
 
-# label da palavra a ser cifrada
-texto_label = Label(janela, text="Texto: ")
-texto_label.place(x=10, y=10)
-
-# area de texto para entrada da palavra
-texto_entrada = Entry(janela)
-texto_entrada.place(x=10, y=30, width=380)
-
-# label da chave
-chave_label = Label(janela, text="Chave: ")
-chave_label.place(x=10, y=60)
-
-# area de texto para entrada da chave
-chave_entrada = Entry(janela)
-chave_entrada.place(x=10, y=80, width=380)
-
-# botao de cifrar
-cifrar_botao = Button(janela, text="Cifrar", command=cifrar)
-cifrar_botao.place(x=10, y=110)
-
-# botao de decifrar
-decifrar_botao = Button(janela, text="Decifrar", command=decifrar)
-decifrar_botao.place(x=60, y=110)
-
-# label da palavra cifrada/decifrada
-texto_saida_label = Label(janela, text="Texto Cifrado/Decifrado: ")
-texto_saida_label.place(x=10, y=140)
-
-# area de texto para saida da palavra cifrada/decifrada
-texto_saida = Text(janela, width=46, height=4)
-texto_saida.place(x=10, y=170)
-
-# loop da janela
-janela.mainloop()
+window.close()
